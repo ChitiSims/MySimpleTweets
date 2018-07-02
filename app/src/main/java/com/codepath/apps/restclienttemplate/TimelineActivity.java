@@ -2,25 +2,36 @@ package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    private TwitterClient client;
+    TwitterClient client;
+    TweetAdapter tweetAdapter;
+    ArrayList<Tweet> tweets;
+    RecyclerView rvTweets;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-
         client = TwitterApp.getRestClient(this);
+
+        // find the RecyclerView
+        //init the arraylist (data source)
+        // construct the adapter from this datasource
         populateTimeline();
     }
 
