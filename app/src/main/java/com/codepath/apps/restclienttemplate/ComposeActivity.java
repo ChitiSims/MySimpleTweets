@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -28,10 +30,23 @@ public class ComposeActivity extends AppCompatActivity{
         setContentView(R.layout.activity_compose);
         client = TwitterApp.getRestClient(this);
 
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.compose_menu, menu);
+        return true;
     }
 
     public void postTweet(View view) {
         postTweetOnTimeline();
+    }
+
+    public void onBack(MenuItem mi) {
+        finish();
+
     }
 
     private void postTweetOnTimeline() {

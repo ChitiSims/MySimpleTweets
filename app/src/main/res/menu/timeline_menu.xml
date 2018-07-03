@@ -4,7 +4,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto">
 <item
     android:id="@+id/miCompose"
-    android:icon="@drawable/ic_compose2"
+    android:icon="@drawable/ic_compose3"
     android:onClick="onComposeAction"
     android:title="Compose"
     android:visible="true"

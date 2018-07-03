@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/miBack"
+        android:icon="@drawable/ic_back_icon"
+        android:onClick="onBack"
+        android:title="back"
+        android:visible="true"
+        app:showAsAction="always|withText"
+        >
+
+    </item>
+</menu>
