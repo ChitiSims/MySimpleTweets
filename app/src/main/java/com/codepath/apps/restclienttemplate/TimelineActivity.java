@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,12 +17,13 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity{
 
     TwitterClient client;
     TweetAdapter tweetAdapter;
@@ -52,19 +54,31 @@ public class TimelineActivity extends AppCompatActivity {
         // Change action bar name
         setTitle("Chwitter");
 
+//        Tweet tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
+//        tweets.add(0, tweet);
+//        tweetAdapter.notifyItemInserted(0);
+//        rvTweets.scrollToPosition(0);
+        //tweetAdapter.notifyItemInserted(0);
+        //rvTweets.scrollToPosition(0);
+        // Toast the name to display temporarily on screen
+        //Toast.makeText(this, "Twitted", Toast.LENGTH_SHORT).show();
 
 
 
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // REQUEST_CODE is defined above
+         //REQUEST_CODE is defined above
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            // Extract name value from result extras
-            String name = data.getExtras().getString("name");
-            int code = data.getExtras().getInt("code", 0);
-            // Toast the name to display temporarily on screen
-            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+             //Extract name value from result extras
+            Parcelable parcel = data.getParcelableExtra("tweet");
+            Tweet tweet = (Tweet) Parcels.unwrap(parcel);
+            //populateTimeline();
+            tweets.add(0, tweet);
+            tweetAdapter.notifyItemInserted(0);
+            rvTweets.scrollToPosition(0);
+             //Toast the name to display temporarily on screen
+            Toast.makeText(this, tweet.body, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -76,7 +90,6 @@ public class TimelineActivity extends AppCompatActivity {
     public void launchComposeView() {
         // first parameter is the context, second is the class of the activity to launch
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-        i.putExtra("mode", 2); // pass arbitrary data to launched activity
         startActivityForResult(i, REQUEST_CODE);
     }
 
@@ -111,7 +124,7 @@ public class TimelineActivity extends AppCompatActivity {
                         tweets.add(tweet);
                         tweetAdapter.notifyItemInserted(tweets.size() - 1);
                     } catch(JSONException e) {
-                        
+                        e.printStackTrace();
                     }
                 }
 

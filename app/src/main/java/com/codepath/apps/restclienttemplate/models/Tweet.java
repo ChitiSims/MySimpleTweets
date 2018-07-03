@@ -2,14 +2,32 @@ package com.codepath.apps.restclienttemplate.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
-public class Tweet {
+import java.io.Serializable;
+
+
+@Parcel
+public class Tweet implements Serializable {
 
     // list out the attributes
+    private static final long serialVersionUID = 5177222050535318633L;
     public String body;
     public long uid;// database ID for the tweet
     public User user;
     public String createdAt;
+
+    // empty  constructor
+    public Tweet() {
+
+    }
+
+    public Tweet(String body, long uid, User user, String createdAt){
+        this.body = body;
+        this.uid = uid;
+        this.user = user;
+        this.createdAt = createdAt;
+    }
 
     // deserialize the JSON
     public static Tweet fromJSON(JSONObject jsonObject) throws JSONException {
