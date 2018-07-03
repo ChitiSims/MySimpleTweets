@@ -5,6 +5,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 <item
     android:id="@+id/miCompose"
     android:icon="@drawable/ic_compose2"
+    android:onClick="onComposeAction"
     android:title="Compose"
     android:visible="true"
     app:showAsAction="always|withText"></item>
