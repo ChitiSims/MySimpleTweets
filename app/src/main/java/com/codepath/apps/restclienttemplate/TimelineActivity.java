@@ -27,6 +27,7 @@ public class TimelineActivity extends AppCompatActivity {
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
+    private final int REQUEST_CODE = 20;
 
 
 
@@ -56,6 +57,17 @@ public class TimelineActivity extends AppCompatActivity {
 
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // REQUEST_CODE is defined above
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            // Extract name value from result extras
+            String name = data.getExtras().getString("name");
+            int code = data.getExtras().getInt("code", 0);
+            // Toast the name to display temporarily on screen
+            Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void onComposeAction(MenuItem mi) {
         // handle click here
         launchComposeView();
@@ -64,7 +76,8 @@ public class TimelineActivity extends AppCompatActivity {
     public void launchComposeView() {
         // first parameter is the context, second is the class of the activity to launch
         Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
-        startActivity(i); // brings up the second activity
+        i.putExtra("mode", 2); // pass arbitrary data to launched activity
+        startActivityForResult(i, REQUEST_CODE);
     }
 
     @Override
