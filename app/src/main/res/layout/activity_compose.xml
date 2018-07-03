@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/btTweet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ComposeActivity">
+
+    <EditText
+        android:id="@+id/etComposeTweet"
+        style="@android:style/Widget.DeviceDefault.EditText"
+        android:layout_width="342dp"
+        android:layout_height="48dp"
+        android:ems="10"
+        android:hint="What's happening?"
+        android:inputType="textMultiLine"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="58dp"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="25dp"
+        android:layout_height="27dp"
+        app:srcCompat="@android:color/holo_blue_light"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="58dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="49dp"
+        android:layout_height="20dp"
+        android:background="@android:color/holo_blue_bright"
+        android:fontFamily="serif"
+        android:text="tweet"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="329dp"
+        tools:layout_editor_absoluteY="121dp"
+        tools:ignore="MissingConstraints" />
+</android.support.constraint.ConstraintLayout>
