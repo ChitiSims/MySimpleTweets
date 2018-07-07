@@ -17,6 +17,7 @@ public class Tweet implements Serializable {
     public User user;
     public String createdAt;
     public String id_str;
+    public String time;
 
     // empty  constructor
     public Tweet() {
@@ -42,6 +43,7 @@ public class Tweet implements Serializable {
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
         tweet.id_str = jsonObject.getString("id_str");
+        tweet.time = TimeFormatter.getTimeDifference(tweet.createdAt);
         return tweet;
 
 

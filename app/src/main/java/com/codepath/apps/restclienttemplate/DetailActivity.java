@@ -38,12 +38,14 @@ public class DetailActivity extends AppCompatActivity {
         TextView screenName = (TextView) findViewById(R.id.tvScreenName);
         TextView tweetbody = (TextView) findViewById(R.id.tvTweet);
         ImageView proPic = (ImageView) findViewById(R.id.ivProPic);
+        TextView time = (TextView) findViewById(R.id.tvTimes);
 
 
 
         userName.setText(tweet.user.name);
         screenName.setText(tweet.user.screenName);
         tweetbody.setText(tweet.body);
+        time.setText(tweet.time);
         Glide.with(this).load(tweet.user.profileImageUrl).into(proPic);
 
 
