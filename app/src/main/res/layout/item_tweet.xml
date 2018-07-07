@@ -18,15 +18,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_toEndOf="@id/ivProfileImage"
         android:text="TextView" />
 
     <TextView
         android:id="@+id/tvBody"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tvUserName"
+        android:onClick="onClick"
         android:layout_marginLeft="5dp"
-        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@id/ivProfileImage"
         android:text="TextView" />
+
+    <ImageButton
+        android:id="@+id/ibReply"
+        android:layout_width="17dp"
+        android:layout_height="14dp"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/ivProfileImage"
+        android:layout_below="@id/tvBody"
+        android:onClick="onClick"
+        app:srcCompat="@drawable/ic_reptweet" />
 </RelativeLayout>

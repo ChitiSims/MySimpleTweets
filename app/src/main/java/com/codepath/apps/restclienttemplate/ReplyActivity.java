@@ -2,12 +2,15 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -19,41 +22,60 @@ import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ComposeActivity extends AppCompatActivity{
+public class ReplyActivity extends AppCompatActivity {
 
     TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
+        setContentView(R.layout.activity_reply);
         client = TwitterApp.getRestClient(this);
 
-        setTitle("Chwitter");
+        Parcelable parcel = getIntent().getParcelableExtra("username");
+        Tweet tweet = (Tweet) Parcels.unwrap(parcel);
 
+        String mention = (String) "@" + tweet.user.name;
+        EditText etName = (EditText) findViewById(R.id.etReplyTweet);
 
+        etName.setText(mention, TextView.BufferType.EDITABLE);
     }
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.compose_menu, menu);
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
         return true;
     }
 
-    public void postTweet(View view) {
-        postTweetOnTimeline();
-    }
 
     public void onBack(MenuItem mi) {
         finish();
 
     }
 
+
+    public void postReply(View view) {
+        postTweetOnTimeline();
+        //test();
+    }
+
+
+
+    private void test() {
+        Parcelable parcel = getIntent().getParcelableExtra("username");
+        Tweet tweet = (Tweet) Parcels.unwrap(parcel);
+
+        String mention = (String) "@" + tweet.user.screenName;
+        Toast.makeText(this, mention, Toast.LENGTH_SHORT).show();
+
+    }
     private void postTweetOnTimeline() {
-        EditText etName = (EditText) findViewById(R.id.etComposeTweet);
+        EditText etName = (EditText) findViewById(R.id.etReplyTweet);
+
+
+
         String newTweet = etName.getText().toString();
+//        newTweet = mention + " " + newTweet;
 
         client.sendTweet(newTweet,new JsonHttpResponseHandler(){
 
@@ -65,7 +87,7 @@ public class ComposeActivity extends AppCompatActivity{
                 // notify the adapter that we've added an item
                 try {
                     Tweet tweet = Tweet.fromJSON(response);
-                    Intent data = new Intent(ComposeActivity.this, TimelineActivity.class);
+                    Intent data = new Intent(ReplyActivity.this, TimelineActivity.class);
                     // Pass relevant data back as a result
                     data.putExtra("tweet", Parcels.wrap(tweet));
                     setResult(RESULT_OK, data); // set result code and bundle data for response
@@ -77,6 +99,7 @@ public class ComposeActivity extends AppCompatActivity{
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+
 
 
             }
@@ -100,4 +123,6 @@ public class ComposeActivity extends AppCompatActivity{
             }
         });
     }
+
+
 }

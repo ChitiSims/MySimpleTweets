@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,9 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
+
+
+
 public class TimelineActivity extends AppCompatActivity{
 
     TwitterClient client;
@@ -30,6 +34,7 @@ public class TimelineActivity extends AppCompatActivity{
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
     private final int REQUEST_CODE = 20;
+    private SwipeRefreshLayout swipeContainer;
 
 
 
@@ -37,7 +42,12 @@ public class TimelineActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+
+
+
         client = TwitterApp.getRestClient(this);
+        //private BottomBar mBottomBar;
+        //lateinit var toolbar: ActionBar
 
         // find the RecyclerView
         rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
@@ -49,24 +59,75 @@ public class TimelineActivity extends AppCompatActivity{
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         //  set the adapter
         rvTweets.setAdapter(tweetAdapter);
+        // find the navBar
         populateTimeline();
 
-        // Change action bar name
+        // Lookup the swipe container view
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.
+                setOnRefreshListener
+                        (new SwipeRefreshLayout.
+                                OnRefreshListener() {
+                            @Override
+                            public void onRefresh() {
+                                // Your code to refresh the list here.
+                                // Make sure you call swipeContainer.setRefreshing(false)
+                                // once the network request has completed successfully.
+                                fetchTimelineAsync(0);
+                            }
+                        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
+
+
+    // Change action bar name
         setTitle("Chwitter");
-
-//        Tweet tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
-//        tweets.add(0, tweet);
-//        tweetAdapter.notifyItemInserted(0);
-//        rvTweets.scrollToPosition(0);
-        //tweetAdapter.notifyItemInserted(0);
-        //rvTweets.scrollToPosition(0);
-        // Toast the name to display temporarily on screen
-        //Toast.makeText(this, "Twitted", Toast.LENGTH_SHORT).show();
-
-
 
     }
 
+
+
+    public void fetchTimelineAsync(int page) {
+        // Send the network request to fetch the updated data
+        // `client` here is an instance of Android Async HTTP
+        // getHomeTimeline is an example endpoint.
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                // Remember to CLEAR OUT old items before appending in the new ones
+                tweetAdapter.clear();
+               // populateTimeline();
+                // ...the data has come back, add new items to your adapter...
+
+                for (int i = 0; i < response.length(); i++) {
+                    // convert each object to a Tweet model
+                    // add that Tweet model to our data source
+                    // notify the adapter that we've added an item
+                    try {
+                        Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
+                        tweets.add(tweet);
+                        //tweetAdapter.notifyItemInserted(tweets.size() - 1);
+                    } catch(JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                tweetAdapter.addAll(tweets);
+                // Now we call setRefreshing(false) to signal refresh has finished
+                swipeContainer.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.d("DEBUG", "Fetch timeline error: " + throwable.toString());
+            }
+        });
+    }
 
 
 
@@ -84,6 +145,14 @@ public class TimelineActivity extends AppCompatActivity{
             Toast.makeText(this, tweet.body, Toast.LENGTH_SHORT).show();
         }
     }
+//            setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                Intent i = new Intent(context, ComposeActivity.class);
+//                startActivityForResult(i, REQUEST_CODE);
+//                Toast.makeText(context, "reply", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
     public void onComposeAction(MenuItem mi) {
         // handle click here
@@ -96,12 +165,20 @@ public class TimelineActivity extends AppCompatActivity{
         startActivityForResult(i, REQUEST_CODE);
     }
 
+    public void launchReplyView() {
+        // first parameter is the context, second is the class of the activity to launch
+        Intent i = new Intent(TimelineActivity.this, ReplyActivity.class);
+        startActivityForResult(i, REQUEST_CODE);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.timeline_menu, menu);
         return true;
     }
+
+
 
 
     private void populateTimeline() {

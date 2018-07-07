@@ -16,17 +16,20 @@ public class Tweet implements Serializable {
     public long uid;// database ID for the tweet
     public User user;
     public String createdAt;
+    public String id_str;
 
     // empty  constructor
     public Tweet() {
 
     }
 
-    public Tweet(String body, long uid, User user, String createdAt){
+    public Tweet(String body, long uid, User user, String createdAt, String id_str){
         this.body = body;
         this.uid = uid;
         this.user = user;
         this.createdAt = createdAt;
+        this.id_str = id_str;
+
     }
 
     // deserialize the JSON
@@ -38,6 +41,7 @@ public class Tweet implements Serializable {
         tweet.uid = jsonObject.getLong("id");
         tweet.createdAt = jsonObject.getString("created_at");
         tweet.user = User.fromJSON(jsonObject.getJSONObject("user"));
+        tweet.id_str = jsonObject.getString("id_str");
         return tweet;
 
 
